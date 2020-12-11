@@ -2,7 +2,7 @@
   "name": "@hexlabs/lambda-api-ts",
   "author": "hexlabs.io",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {},
