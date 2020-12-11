@@ -15,15 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
 
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v2
-        with:
-          token: ${{ secrets.github_token }}
-          prefix: ${{ github.ref }}
-
       - name: Set Version
-        run: npm --no-git-tag-version version 1.0.${{ steps.buildnumber.outputs.build_number }}
+        run: npm --no-git-tag-version version 1.0.${{ env.GITHUB_RUN_NUMBER }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
