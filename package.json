@@ -1,5 +1,5 @@
 {
-  "name": "lambda-api-ts",
+  "name": "@hexlabs/lambda-api-ts",
   "author": "hexlabs.io",
   "version": "0.1.0",
   "private": true,
@@ -7,9 +7,13 @@
   "types": "dist/index.d.ts",
   "dependencies": {},
   "scripts": {
-    "build:watch": "tsc -w --project tsconfig.json",
+    "build": "tsc --project tsconfig.json",
     "test": "jest"
   },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/hexlabsio/lambda-api-ts#readme",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.65",
     "@types/jest": "^26.0.19",
