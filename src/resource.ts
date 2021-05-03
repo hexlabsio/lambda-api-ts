@@ -1,4 +1,4 @@
-import {Api, apiHandler, Handler} from "./api-handler";
+import {TypedHandler, handler, Handler} from "./api-handler";
 import {Operation, operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
 
 export type Identifiable = { id: string }
@@ -21,9 +21,9 @@ export function resource<S extends string, T>(definition: ResourceApiDefinition<
   };
 }
 
-export function resourceApi<T, S extends string>(definition: ResourceApiDefinition<S>, userScope: ScopeDiscovery<S>, handler: Api<T>): Handler {
-  return apiHandler(async event => {
-    const {body, ...result} = await handler(event);
+export function resourceHandler<T, S extends string>(definition: ResourceApiDefinition<S>, userScope: ScopeDiscovery<S>, typedHandler: TypedHandler<T>): Handler {
+  return handler(async event => {
+    const {body, ...result} = await typedHandler(event);
     return {
       ...result,
       body: resource(definition, userScope(event), body)

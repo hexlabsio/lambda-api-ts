@@ -1,4 +1,4 @@
-import {Api, apiHandler, Handler} from "./api-handler";
+import {TypedHandler, handler, Handler} from "./api-handler";
 import {Operation, operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
 import {Identifiable, resource, Resource, ResourceApiDefinition} from "./resource";
 
@@ -34,13 +34,13 @@ export function collectionOf<T extends Identifiable = Identifiable, R = never>(i
   return {items, properties}
 }
 
-export function collectionApi<S extends string, T extends Identifiable, R>(
+export function collectionHandler<S extends string, T extends Identifiable, R>(
   definition: CollectionApiDefinition<S>,
   scope: ScopeDiscovery<S>,
-  handler: Api<CollectionItem<T,R>>
+  typedHandler: TypedHandler<CollectionItem<T,R>>
 ): Handler {
-  return apiHandler(async event => {
-    const {body: {properties, items}, ...result} = await handler(event);
+  return handler(async event => {
+    const {body: {properties, items}, ...result} = await typedHandler(event);
     return {
       ...result,
       body: collection(definition, scope(event), items, properties)

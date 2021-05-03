@@ -1,7 +1,7 @@
 import {APIGatewayProxyEvent} from "aws-lambda";
 import {TypedResult} from "../api-handler";
 import {ScopedOperation} from "../operation";
-import {resource, resourceApi, ResourceApiDefinition} from '../resource'
+import {resource, resourceHandler, ResourceApiDefinition} from '../resource'
 
 type Scopes = 'admin' | 'read-only'
 
@@ -37,7 +37,7 @@ describe('resource', () => {
       body: {  key: 'value' },
       statusCode: 200
     };
-    const api = resourceApi(apiDefinition, () => "admin", async () => response);
+    const api = resourceHandler(apiDefinition, () => "admin", async () => response);
     const result = await api({} as unknown as APIGatewayProxyEvent);
     expect(result).toEqual({
       statusCode: 200,

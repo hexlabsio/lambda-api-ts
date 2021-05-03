@@ -1,8 +1,5 @@
-import {APIGatewayProxyEvent} from "aws-lambda";
-import {TypedResult} from "../api-handler";
 import {collection, CollectionApiDefinition, collectionOf} from "../collection";
 import {ScopedOperation} from "../operation";
-import {resource, resourceApi, ResourceApiDefinition} from '../resource'
 
 type Scopes = 'admin' | 'read-only'
 

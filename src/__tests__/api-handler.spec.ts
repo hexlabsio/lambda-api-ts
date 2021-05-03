@@ -1,12 +1,12 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda";
-import {Api, apiHandler, Handler, TypedResult} from "../api-handler";
+import {TypedHandler, handler, Handler, TypedResult} from "../api-handler";
 import fn = jest.fn;
 import Mock = jest.Mock;
 
 interface Response {key: string}
 let mockHandler: Mock<TypedResult<Response>, [APIGatewayProxyEvent]> = fn();
 const testEvent: APIGatewayProxyEvent = {headers: {'a': 'b'}, body: JSON.stringify({key: 'hello test'})} as unknown as APIGatewayProxyEvent;
-let handler: Handler;
+let handle: Handler;
 
 describe('api-handler', () => {
   it('should invoke api function passed and map response body to string', async () => {
@@ -29,7 +29,7 @@ describe('api-handler', () => {
 });
 
 function givenValidHandler() {
-  handler = apiHandler(mockHandler as unknown as Api<Response>);
+  handle = handler(mockHandler as unknown as TypedHandler<Response>);
 }
 
 function givenHandlerReturns<T>(result: T) {
@@ -37,7 +37,7 @@ function givenHandlerReturns<T>(result: T) {
 }
 
 function whenInvokedWith(event: APIGatewayProxyEvent): Result {
-  return new Result(handler(event));
+  return new Result(handle(event));
 }
 
 class Result {
