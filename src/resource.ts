@@ -1,11 +1,10 @@
 import {TypedHandler, handler, Handler} from "./api-handler";
 import {Operation, operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
 
-export type Identifiable = { id: string }
+export type Identifiable = { '@id': string }
 
-export interface Resource<T> extends Identifiable {
-  resource: T,
-  operation: Operation[]
+export type Resource<T> = T & Identifiable & {
+  '@operation': Operation[]
 }
 
 export type ResourceApiDefinition<S extends string> = {
@@ -15,9 +14,9 @@ export type ResourceApiDefinition<S extends string> = {
 
 export function resource<S extends string, T>(definition: ResourceApiDefinition<S>, scope: S, item: T, parent: string = ''): Resource<T> {
   return {
-    id: parent + definition.id,
-    operation: operationsForScope(definition.operations, scope),
-    resource: item
+    '@id': parent + definition.id,
+    '@operation': operationsForScope(definition.operations, scope),
+    ...item
   };
 }
 

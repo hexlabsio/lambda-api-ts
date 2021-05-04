@@ -26,9 +26,9 @@ describe('resource', () => {
   it('should create a Resource from api definition', () => {
     const result = resource(apiDefinition, "admin", { key: 'value' });
     expect(result).toEqual({
-      id: '/test-api',
-      operation: expectedAdminOperations,
-      resource: { key: 'value' }
+      '@id': '/test-api',
+      '@operation': expectedAdminOperations,
+      key: 'value'
     })
   });
   
@@ -42,9 +42,9 @@ describe('resource', () => {
     expect(result).toEqual({
       statusCode: 200,
       body: JSON.stringify({
-        id: '/test-api',
-        operation: expectedAdminOperations,
-        resource: { key: 'value' }
+        '@id': '/test-api',
+        '@operation': expectedAdminOperations,
+        key: 'value'
       })
     })
   });

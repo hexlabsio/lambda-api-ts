@@ -25,34 +25,34 @@ const expectedReadOnlyOperations = [
 describe('collection', () => {
   
   it('should map array with properties to collection', () => {
-    const collection = collectionOf([{id: 'a'}], {'a': 'b'});
+    const collection = collectionOf([{'@id': 'a'}], {'a': 'b'});
     expect(collection).toEqual({
-      items: [{id: 'a'}],
+      items: [{'@id': 'a'}],
       properties: {'a': 'b'}
     });
   });
   
   it('should create a Collection from api definition', () => {
-      const result = collection(apiDefinition, "read-only", [{id: 'a', key: 'value1'}, {id: 'b', key: 'value2'}, {id: 'c', key: 'value3'}]);
+      const result = collection(apiDefinition, "read-only", [{'@id': 'a', key: 'value1'}, {'@id': 'b', key: 'value2'}, {'@id': 'c', key: 'value3'}]);
       expect(result).toEqual({
-        id: '/test-api',
-        operation: expectedReadOnlyOperations,
+        '@id': '/test-api',
+        '@operation': expectedReadOnlyOperations,
         totalItems: 3,
         member: [
           {
-            id: '/test-api/a',
-            operation: expectedReadOnlyOperations,
-            resource: { key: 'value1'}
+            '@id': '/test-api/a',
+            '@operation': expectedReadOnlyOperations,
+            key: 'value1'
           },
           {
-            id: '/test-api/b',
-            operation: expectedReadOnlyOperations,
-            resource: { key: 'value2'}
+            '@id': '/test-api/b',
+            '@operation': expectedReadOnlyOperations,
+            key: 'value2'
           },
           {
-            id: '/test-api/c',
-            operation: expectedReadOnlyOperations,
-            resource: { key: 'value3'}
+            '@id': '/test-api/c',
+            '@operation': expectedReadOnlyOperations,
+            key: 'value3'
           },
           ]
       })

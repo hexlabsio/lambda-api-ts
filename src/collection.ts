@@ -1,10 +1,9 @@
 import {TypedHandler, handler, Handler} from "./api-handler";
-import {Operation, operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
+import {operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
 import {Identifiable, resource, Resource, ResourceApiDefinition} from "./resource";
 
-export interface Collection<T, R> extends Resource<R | undefined> {
+export type Collection<T, R = {}> = Resource<R> & {
   member: Resource<T>[];
-  operation: Operation[];
   totalItems: number;
 }
 
@@ -20,13 +19,16 @@ export interface CollectionItem<T extends Identifiable, R> {
 }
 
 
-export function collection<S extends string, R, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[], properties?: R): Collection<Omit<T, 'id'>, R> {
+export function collection<S extends string, R, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[], properties?: R): Collection<Omit<T, '@id'>, R> {
   return {
-    id: definition.id,
-    member: items.map( ({id, ...itemResource}) => resource({ id: `/${id}`, operations: definition.member.operations }, scope, itemResource, definition.id)),
-    operation: operationsForScope(definition.operations, scope),
+    '@id': definition.id,
+    '@operation': operationsForScope(definition.operations, scope),
+    member: items.map(item => {
+      const { '@id': id, ...itemResource} = item
+      return resource({id: `/${id}`, operations: definition.member.operations }, scope, itemResource, definition.id)
+    }),
     totalItems: items.length,
-    resource: properties
+    ...(properties ?? {} as R)
   }
 }
 
@@ -47,5 +49,3 @@ export function collectionHandler<S extends string, T extends Identifiable, R>(
     }
   })
 }
-
-
