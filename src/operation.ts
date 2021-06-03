@@ -5,7 +5,7 @@ export type HttpStatusCode = number;
 export type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH'
 
 export interface Operation {
-  method: HttpMethod,
+  method: HttpMethod | string,
   expects?: SchemaReference,
   returns?: SchemaReference,
   statusCodes: HttpStatusCode[]

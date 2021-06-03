@@ -1,5 +1,4 @@
-import {TypedHandler, handler, Handler} from "./api-handler";
-import {operationsForScope, ScopeDiscovery, ScopedOperation} from "./operation";
+import {operationsForScope, ScopedOperation} from "./operation";
 import {Identifiable, resource, Resource, ResourceApiDefinition} from "./resource";
 
 export type Collection<T, R = {}> = Resource<R> & {
@@ -19,7 +18,7 @@ export interface CollectionItem<T extends Identifiable, R> {
 }
 
 
-export function collection<S extends string, R, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[], properties?: R): Collection<Omit<T, '@id'>, R> {
+export function collection<S extends string, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[]): Collection<Omit<T, '@id'>> {
   return {
     '@id': definition.id,
     '@operation': operationsForScope(definition.operations, scope),
@@ -27,25 +26,10 @@ export function collection<S extends string, R, T extends Identifiable>(definiti
       const { '@id': id, ...itemResource} = item
       return resource({id: `/${id}`, operations: definition.member.operations }, scope, itemResource, definition.id)
     }),
-    totalItems: items.length,
-    ...(properties ?? {} as R)
+    totalItems: items.length
   }
 }
 
 export function collectionOf<T extends Identifiable = Identifiable, R = never>(items: T[], properties?: R): CollectionItem<T, R> {
   return {items, properties}
-}
-
-export function collectionHandler<S extends string, T extends Identifiable, R>(
-  definition: CollectionApiDefinition<S>,
-  scope: ScopeDiscovery<S>,
-  typedHandler: TypedHandler<CollectionItem<T,R>>
-): Handler {
-  return handler(async event => {
-    const {body: {properties, items}, ...result} = await typedHandler(event);
-    return {
-      ...result,
-      body: collection(definition, scope(event), items, properties)
-    }
-  })
 }
