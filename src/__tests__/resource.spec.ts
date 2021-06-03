@@ -1,7 +1,7 @@
 import {APIGatewayProxyEvent} from "aws-lambda";
 import {TypedResult} from "../api-handler";
 import {ScopedOperation} from "../operation";
-import {resource, resourceHandler, ResourceApiDefinition} from '../resource'
+import {resource, ResourceApiDefinition} from '../resource'
 
 type Scopes = 'admin' | 'read-only'
 
@@ -29,23 +29,6 @@ describe('resource', () => {
       '@id': '/test-api',
       '@operation': expectedAdminOperations,
       key: 'value'
-    })
-  });
-  
-  it('should map simple typed body to Resource type in response', async () => {
-    const response: TypedResult<{ key: string }> = {
-      body: {  key: 'value' },
-      statusCode: 200
-    };
-    const api = resourceHandler(apiDefinition, () => "admin", async () => response);
-    const result = await api({} as unknown as APIGatewayProxyEvent);
-    expect(result).toEqual({
-      statusCode: 200,
-      body: JSON.stringify({
-        '@id': '/test-api',
-        '@operation': expectedAdminOperations,
-        key: 'value'
-      })
     })
   });
 });
