@@ -18,7 +18,7 @@ export interface CollectionItem<T extends Identifiable, R> {
 }
 
 
-export function collection<S extends string, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[]): Collection<Omit<T, '@id'>> {
+export function collection<S extends string, T extends Identifiable>(definition: CollectionApiDefinition<S>, scope: S, items: T[], next?: string): Collection<Omit<T, '@id'>> {
   return {
     '@id': definition.id,
     '@operation': operationsForScope(definition.operations, scope),
@@ -26,7 +26,8 @@ export function collection<S extends string, T extends Identifiable>(definition:
       const { '@id': id, ...itemResource} = item
       return resource({id: `/${id}`, operations: definition.member.operations }, scope, itemResource, definition.id)
     }),
-    totalItems: items.length
+    totalItems: items.length,
+    ...(next ? {} : {next: next})
   }
 }
 
