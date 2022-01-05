@@ -27,7 +27,7 @@ export function collection<S extends string, T extends Identifiable>(definition:
       return resource({id: `/${id}`, operations: definition.member.operations }, scope, itemResource, definition.id)
     }),
     totalItems: items.length,
-    ...(next ? {} : {next: next})
+    ...(next ? {next: next} : {})
   }
 }
 
